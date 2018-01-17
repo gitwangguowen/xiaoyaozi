@@ -17,7 +17,7 @@ public class UserController {
 		User user = new User();
 		user.setName("tom");
 		user.setAge("20");
-		user.setSex("男");
+		user.setSex("男");//性别
 		return user;
 	}
 	
