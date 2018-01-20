@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import top.ifenxiang.pojo.Banner;
 
 @Controller
@@ -27,6 +26,12 @@ public class IndexController {
 		banner.setUrl("www.baidu.com");
 		list.add(banner);
 		return list;
+	}
+	
+	@RequestMapping("/findLogistics/{exCode}/{logistics}")//exCode:物流公司号 ;logistics:物流单号 kuaidi100APIKey=29833628d495d7a5
+	@ResponseBody
+	public String findLogistics(@PathVariable Long exCode,@PathVariable Long logistics) {
+		return "";
 	}
 	
 }
