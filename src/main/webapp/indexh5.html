@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui/mui.min.js"></script>
+		<script src="js/clipboard.min.js"></script>
+		<script src="js/jquery-1.11.1.min.js" charset="UTF-8"></script>
+		<style type="text/css">
+			.mui-slider-item img {
+				height: 150px;
+			}
+			.mui-control-item {
+				color: red;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider">
+				<div class="mui-slider-group mui-slider-loop">
+					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#"> <img src="uploads/taobao_b4.jpg" /></a>
+					</div>
+					<!-- 第一张 -->
+					<div class="mui-slider-item">
+						<a href="#"> <img src="uploads/taobao_b1.png"></a>
+					</div>
+					<!-- 第二张 -->
+					<div class="mui-slider-item">
+						<a href="#"> <img src="uploads/taobao_b2.jpg"></a>
+					</div>
+					<!-- 第三张 -->
+					<div class="mui-slider-item">
+						<a href="#"> <img src="uploads/taobao_b3.jpg"></a>
+					</div>
+					<!-- 第四张 -->
+					<div class="mui-slider-item">
+						<a href="#"> <img src="uploads/taobao_b4.jpg"></a>
+					</div>
+					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#"><img src="uploads/taobao_b1.png"></a>
+					</div>
+				</div>
+				<div class="mui-slider-indicator">
+					<div class="mui-indicator mui-active"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+				</div>
+			</div>
+			
+			<!-- 导航 -->
+			<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+			    <div class="mui-scroll">
+			        <a onclick="getProductList(1,10,'推荐')" class="mui-control-item">推荐</a>
+			        <a onclick="getProductList(1,10,'热点')" class="mui-control-item">热点</a>
+			        <a onclick="getProductList(1,10,'女装尖货')" class="mui-control-item mui-active">女装尖货</a>
+			        <!-- <a onclick="getProductList(1,10,'母婴热推')" class="mui-control-item">母婴热推</a>
+			        <a onclick="getProductList(1,10,'吃货秘籍')" class="mui-control-item">吃货秘籍</a>
+			        <a onclick="getProductList(1,10,'9块9')" class="mui-control-item">9块9</a> -->
+			    </div>
+			</div>
+			
+			<div id="productshow"></div><!-- 商品列表div -->
+			
+			<div class="mui-content-padded" style="text-align: center"></div><!-- 分页div -->
+		</div>
+</body>
+	<script type="text/javascript" charset="UTF-8">
+		$(document).ready(function() {
+			getProductList(1,10,'女装尖货');
+		});
+
+		mui.init();
+		
+		//获得slider插件对象
+		var gallery = mui('.mui-slider');
+		gallery.slider({
+			interval : 5000
+		//自动轮播周期，若为0则不自动播放，默认为0；
+		});
+
+		new Clipboard('.mui-card-link');
+
+		//弹框提示
+		function alertdd() {
+			mui.alert('打开手机淘宝领取', '复制成功');
+		}
+		
+		function getProductList(currentPage,pageSize,type) {
+			$.ajax( {
+				type : 'POST',
+				data : "type="+type,
+				url : "/product/getProductList/"+currentPage+"/30",
+				success : function(json) {
+					if (json.code == 200) {
+						$("#productshow").html("");
+						/* if (json.data.list.length < 1) {
+							$("#productshow").html("暂无宝贝,敬请期待");
+							$(".mui-content-padded").html("")
+						} */
+						for (var i = 0; i < json.data.list.length; i++) {
+							var dprice;
+							var token;
+							var copyStr;
+							if ("无" == json.data.list[i].discountDetail) {
+								dprice = "暂无优惠";
+								token = json.data.list[i].tkToken;
+								copyStr = "点击复制宝贝口令";
+							} else {
+								dprice = "领卷立减" + json.data.list[i].discountDetail.substring(json.data.list[i].discountDetail.indexOf("减")+1);
+								token = json.data.list[i].discountToken;
+								copyStr = "点击复制优惠卷口令";
+							}
+							var html = ""
+							+ '<div class="mui-card"><div class="mui-card-header mui-card-media" style="height:95vw;background-image:url('+json.data.list[i].productIndexImage+')"></div>'
+							+ '<div class="mui-card-content"><div class="mui-card-content-inner"><p>原价：'+json.data.list[i].shopPrice+'<font style="color: #FF5053">&nbsp;&nbsp;&nbsp;'+dprice+'</font></p>'
+							+ '<p style="color: #333;">'+json.data.list[i].productName+'</p></div></div>'
+							+ '<div class="mui-card-footer"><a data-clipboard-text="'+token+'" href="javascript:alertdd()" class="mui-card-link" style="color: #D81E06;">'+copyStr+'</a></div></div>';
+							$("#productshow").append(html);
+						}
+						
+						//初始化分页
+						pageSetting(json.data,type);
+					}
+				}
+			});
+		}
+		
+		function pageSetting(pageInfo,type) {
+			type = "'"+type+"'";
+			//当前页
+		    var pageNum = pageInfo.pageNum;
+		    //每页的数量
+		    var pageSize = pageInfo.pageSize;
+		    //当前页的数量
+		    var size = pageInfo.size;
+		    //当前页面第一个元素在数据库中的行号
+		    var startRow = pageInfo.startRow;
+		    //当前页面最后一个元素在数据库中的行号
+		    var endRow = pageInfo.endRow;
+		    //总记录数
+		    var total = pageInfo.total;
+		    //总页数
+		    var pages = pageInfo.pages;
+		    //第一页
+		    var firstPage = pageInfo.firstPage;
+		    //前一页
+		    var prePage = pageInfo.prePage;
+		    //下一页
+		    var nextPage = pageInfo.nextPage;
+		    //最后一页
+		    var lastPage = pageInfo.lastPage;
+		    //是否为第一页
+		    var isFirstPage = pageInfo.isFirstPage;
+		    //是否为最后一页
+		    var isLastPage = pageInfo.isLastPage;
+		    //是否有前一页
+		    var hasPreviousPage = pageInfo.hasPreviousPage;
+		    //是否有下一页
+		    var hasNextPage = pageInfo.hasNextPage;
+		    //导航页码数
+		    var navigatePages = pageInfo.navigatePages;
+		    //所有导航页号
+		    var navigatepageNums = pageInfo.navigatepageNums;//数组
+		    
+			var html = '<ul class="mui-pagination">';
+			if (hasPreviousPage) {
+				html += '<li class="mui-previous"><a href="javascript:getProductList('+prePage+',10,'+type+')"> &laquo;</a></li>';
+			} else {
+				html += '<li class="mui-previous mui-disabled"><a href="javascript:void(0)"> &laquo;</a></li>';
+			}
+			for (var i = 0; i < navigatepageNums.length; i++) {
+				if (pageNum == navigatepageNums[i]) {
+					html += '<li class="mui-active"><a href="javascript:void(0)"> '+pageNum+' </a></li>';
+				} else {
+					html += '<li><a href="javascript:getProductList('+navigatepageNums[i]+',10,'+type+')"> '+navigatepageNums[i]+' </a></li>';
+				}
+			}
+			if (hasNextPage) {
+				html += '<li class="mui-next"><a href="javascript:getProductList('+nextPage+',10,'+type+')"> &raquo; </a></li></ul>';
+			} else {
+				html += '<li class="mui-next mui-disabled"><a href="javascript:void(0)"> &raquo; </a></li></ul>';
+			}
+			$(".mui-content-padded").html(html);
+			scrollTo(0,0);
+		}
+		
+	</script>
+
+</html>

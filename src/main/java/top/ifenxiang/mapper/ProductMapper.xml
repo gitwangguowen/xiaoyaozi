@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.ifenxiang.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="top.ifenxiang.pojo.Product">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="taobao_pid" jdbcType="VARCHAR" property="taobaoPid" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_index_image" jdbcType="VARCHAR" property="productIndexImage" />
+    <result column="shop_price" jdbcType="DOUBLE" property="shopPrice" />
+    <result column="sales_month" jdbcType="INTEGER" property="salesMonth" />
+    <result column="tk_url1" jdbcType="VARCHAR" property="tkUrl1" />
+    <result column="tk_url2" jdbcType="VARCHAR" property="tkUrl2" />
+    <result column="tk_token" jdbcType="VARCHAR" property="tkToken" />
+    <result column="discount_total" jdbcType="INTEGER" property="discountTotal" />
+    <result column="discount_residue" jdbcType="INTEGER" property="discountResidue" />
+    <result column="discount_detail" jdbcType="VARCHAR" property="discountDetail" />
+    <result column="discount_start" jdbcType="TIMESTAMP" property="discountStart" />
+    <result column="discount_end" jdbcType="TIMESTAMP" property="discountEnd" />
+    <result column="discount_url1" jdbcType="VARCHAR" property="discountUrl1" />
+    <result column="discount_url2" jdbcType="VARCHAR" property="discountUrl2" />
+    <result column="discount_token" jdbcType="VARCHAR" property="discountToken" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, taobao_pid, product_name, product_index_image, shop_price, sales_month, tk_url1, 
+    tk_url2, tk_token, discount_total, discount_residue, discount_detail, discount_start, 
+    discount_end, discount_url1, discount_url2, discount_token, type, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="top.ifenxiang.pojo.ProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="top.ifenxiang.pojo.ProductExample">
+    delete from t_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="top.ifenxiang.pojo.Product">
+    insert into t_product (id, taobao_pid, product_name, 
+      product_index_image, shop_price, sales_month, 
+      tk_url1, tk_url2, tk_token, 
+      discount_total, discount_residue, discount_detail, 
+      discount_start, discount_end, discount_url1, 
+      discount_url2, discount_token, type, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{taobaoPid,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{productIndexImage,jdbcType=VARCHAR}, #{shopPrice,jdbcType=DOUBLE}, #{salesMonth,jdbcType=INTEGER}, 
+      #{tkUrl1,jdbcType=VARCHAR}, #{tkUrl2,jdbcType=VARCHAR}, #{tkToken,jdbcType=VARCHAR}, 
+      #{discountTotal,jdbcType=INTEGER}, #{discountResidue,jdbcType=INTEGER}, #{discountDetail,jdbcType=VARCHAR}, 
+      #{discountStart,jdbcType=TIMESTAMP}, #{discountEnd,jdbcType=TIMESTAMP}, #{discountUrl1,jdbcType=VARCHAR}, 
+      #{discountUrl2,jdbcType=VARCHAR}, #{discountToken,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="top.ifenxiang.pojo.Product">
+    insert into t_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taobaoPid != null">
+        taobao_pid,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productIndexImage != null">
+        product_index_image,
+      </if>
+      <if test="shopPrice != null">
+        shop_price,
+      </if>
+      <if test="salesMonth != null">
+        sales_month,
+      </if>
+      <if test="tkUrl1 != null">
+        tk_url1,
+      </if>
+      <if test="tkUrl2 != null">
+        tk_url2,
+      </if>
+      <if test="tkToken != null">
+        tk_token,
+      </if>
+      <if test="discountTotal != null">
+        discount_total,
+      </if>
+      <if test="discountResidue != null">
+        discount_residue,
+      </if>
+      <if test="discountDetail != null">
+        discount_detail,
+      </if>
+      <if test="discountStart != null">
+        discount_start,
+      </if>
+      <if test="discountEnd != null">
+        discount_end,
+      </if>
+      <if test="discountUrl1 != null">
+        discount_url1,
+      </if>
+      <if test="discountUrl2 != null">
+        discount_url2,
+      </if>
+      <if test="discountToken != null">
+        discount_token,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="taobaoPid != null">
+        #{taobaoPid,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productIndexImage != null">
+        #{productIndexImage,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPrice != null">
+        #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salesMonth != null">
+        #{salesMonth,jdbcType=INTEGER},
+      </if>
+      <if test="tkUrl1 != null">
+        #{tkUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="tkUrl2 != null">
+        #{tkUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="tkToken != null">
+        #{tkToken,jdbcType=VARCHAR},
+      </if>
+      <if test="discountTotal != null">
+        #{discountTotal,jdbcType=INTEGER},
+      </if>
+      <if test="discountResidue != null">
+        #{discountResidue,jdbcType=INTEGER},
+      </if>
+      <if test="discountDetail != null">
+        #{discountDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="discountStart != null">
+        #{discountStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountEnd != null">
+        #{discountEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountUrl1 != null">
+        #{discountUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="discountUrl2 != null">
+        #{discountUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="discountToken != null">
+        #{discountToken,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="top.ifenxiang.pojo.ProductExample" resultType="java.lang.Long">
+    select count(*) from t_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_product
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.taobaoPid != null">
+        taobao_pid = #{record.taobaoPid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productIndexImage != null">
+        product_index_image = #{record.productIndexImage,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopPrice != null">
+        shop_price = #{record.shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="record.salesMonth != null">
+        sales_month = #{record.salesMonth,jdbcType=INTEGER},
+      </if>
+      <if test="record.tkUrl1 != null">
+        tk_url1 = #{record.tkUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tkUrl2 != null">
+        tk_url2 = #{record.tkUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tkToken != null">
+        tk_token = #{record.tkToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.discountTotal != null">
+        discount_total = #{record.discountTotal,jdbcType=INTEGER},
+      </if>
+      <if test="record.discountResidue != null">
+        discount_residue = #{record.discountResidue,jdbcType=INTEGER},
+      </if>
+      <if test="record.discountDetail != null">
+        discount_detail = #{record.discountDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.discountStart != null">
+        discount_start = #{record.discountStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.discountEnd != null">
+        discount_end = #{record.discountEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.discountUrl1 != null">
+        discount_url1 = #{record.discountUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.discountUrl2 != null">
+        discount_url2 = #{record.discountUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.discountToken != null">
+        discount_token = #{record.discountToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_product
+    set id = #{record.id,jdbcType=BIGINT},
+      taobao_pid = #{record.taobaoPid,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      product_index_image = #{record.productIndexImage,jdbcType=VARCHAR},
+      shop_price = #{record.shopPrice,jdbcType=DOUBLE},
+      sales_month = #{record.salesMonth,jdbcType=INTEGER},
+      tk_url1 = #{record.tkUrl1,jdbcType=VARCHAR},
+      tk_url2 = #{record.tkUrl2,jdbcType=VARCHAR},
+      tk_token = #{record.tkToken,jdbcType=VARCHAR},
+      discount_total = #{record.discountTotal,jdbcType=INTEGER},
+      discount_residue = #{record.discountResidue,jdbcType=INTEGER},
+      discount_detail = #{record.discountDetail,jdbcType=VARCHAR},
+      discount_start = #{record.discountStart,jdbcType=TIMESTAMP},
+      discount_end = #{record.discountEnd,jdbcType=TIMESTAMP},
+      discount_url1 = #{record.discountUrl1,jdbcType=VARCHAR},
+      discount_url2 = #{record.discountUrl2,jdbcType=VARCHAR},
+      discount_token = #{record.discountToken,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="top.ifenxiang.pojo.Product">
+    update t_product
+    <set>
+      <if test="taobaoPid != null">
+        taobao_pid = #{taobaoPid,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productIndexImage != null">
+        product_index_image = #{productIndexImage,jdbcType=VARCHAR},
+      </if>
+      <if test="shopPrice != null">
+        shop_price = #{shopPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salesMonth != null">
+        sales_month = #{salesMonth,jdbcType=INTEGER},
+      </if>
+      <if test="tkUrl1 != null">
+        tk_url1 = #{tkUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="tkUrl2 != null">
+        tk_url2 = #{tkUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="tkToken != null">
+        tk_token = #{tkToken,jdbcType=VARCHAR},
+      </if>
+      <if test="discountTotal != null">
+        discount_total = #{discountTotal,jdbcType=INTEGER},
+      </if>
+      <if test="discountResidue != null">
+        discount_residue = #{discountResidue,jdbcType=INTEGER},
+      </if>
+      <if test="discountDetail != null">
+        discount_detail = #{discountDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="discountStart != null">
+        discount_start = #{discountStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountEnd != null">
+        discount_end = #{discountEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="discountUrl1 != null">
+        discount_url1 = #{discountUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="discountUrl2 != null">
+        discount_url2 = #{discountUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="discountToken != null">
+        discount_token = #{discountToken,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.ifenxiang.pojo.Product">
+    update t_product
+    set taobao_pid = #{taobaoPid,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_index_image = #{productIndexImage,jdbcType=VARCHAR},
+      shop_price = #{shopPrice,jdbcType=DOUBLE},
+      sales_month = #{salesMonth,jdbcType=INTEGER},
+      tk_url1 = #{tkUrl1,jdbcType=VARCHAR},
+      tk_url2 = #{tkUrl2,jdbcType=VARCHAR},
+      tk_token = #{tkToken,jdbcType=VARCHAR},
+      discount_total = #{discountTotal,jdbcType=INTEGER},
+      discount_residue = #{discountResidue,jdbcType=INTEGER},
+      discount_detail = #{discountDetail,jdbcType=VARCHAR},
+      discount_start = #{discountStart,jdbcType=TIMESTAMP},
+      discount_end = #{discountEnd,jdbcType=TIMESTAMP},
+      discount_url1 = #{discountUrl1,jdbcType=VARCHAR},
+      discount_url2 = #{discountUrl2,jdbcType=VARCHAR},
+      discount_token = #{discountToken,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

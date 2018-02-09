@@ -11,11 +11,9 @@
     http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
-	<!-- 扫描controller（controller层注入） -->
-	<context:component-scan base-package="top.ifenxiang.controller"	use-default-filters="false">
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
+	<!-- 扫描controller（controller层注入） <context:component-scan base-package="top.ifenxiang.controller" 
+		use-default-filters="false"> <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" 
+		/> </context:component-scan> -->
 
 	<mvc:annotation-driven />
 
@@ -52,4 +50,14 @@
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/static/" p:suffix=".html" />
+
+	<mvc:resources mapping="/api-doc/**" location="/api-doc/" />
+
+	<!-- 多部分文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="104857600" />
+		<property name="maxInMemorySize" value="4096" />
+		<property name="defaultEncoding" value="UTF-8"></property>
+	</bean>
 </beans>

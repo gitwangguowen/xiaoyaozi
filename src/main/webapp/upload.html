@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<!-- 	<form name="serForm" action="/fileUpload" method="post"
+		enctype="multipart/form-data">
+		<h1>采用流的方式上传文件</h1>
+		<input type="file" name="file"> <input type="submit"
+			value="upload" />
+	</form> -->
+	<form name="myForm"  enctype="multipart/form-data">
+	    <input type="text" name="userName">
+	    <input type="file" name="img">
+	    <input type="button" id="btn" value="submit">
+	</form>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#btn').click(function () {
+			    var userName = document.myForm.userName.value;
+			    var img = document.myForm.img.files[0];
+			    
+			    var fm = new FormData();
+			    fm.append('userName', userName);
+			    fm.append('file', img);
+			    $.ajax(
+			        {
+			            url: '/fileUpload',
+			            type: 'POST',
+			            data: fm,
+			            contentType: false, //禁止设置请求类型
+			            processData: false, //禁止jquery对DAta数据的处理,默认会处理
+			            //禁止的原因是,FormData已经帮我们做了处理
+			            success: function (result) {
+			                //测试是否成功
+			                //但需要你后端有返回值
+			                alert(result);
+			            }
+			        }
+			    );
+			}); 
+		})
+	</script>
+
+	<form name="Form2" action="/SpringMVC006/fileUpload2" method="post"
+		enctype="multipart/form-data">
+		<h1>采用multipart提供的file.transfer方法上传文件</h1>
+		<input type="file" name="file"> <input type="submit"
+			value="upload" />
+	</form>
+
+	<form name="Form2" action="/SpringMVC006/springUpload" method="post"
+		enctype="multipart/form-data">
+		<h1>使用spring mvc提供的类的方法上传文件</h1>
+		<input type="file" name="file"> <input type="submit"
+			value="upload" />
+	</form>
+</body>
+</html>
